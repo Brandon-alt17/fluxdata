@@ -1,0 +1,40 @@
+{
+  "name": "fluxdata",
+  "version": "1.0.0",
+  "description": "Este proyecto simula un intermediario tecnológico ante la DIAN para recibir, validar y firmar documentos UBL 2.1.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brandon-alt17/fluxdata.git"
+  },
+  "keywords": [],
+  "author": "SwordTech",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brandon-alt17/fluxdata/issues"
+  },
+  "homepage": "https://github.com/Brandon-alt17/fluxdata#readme",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.540.0",
+    "pdfkit": "^0.17.1",
+    "pg": "^8.16.3",
+    "recharts": "^3.1.2",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.12"
+  }
+}
