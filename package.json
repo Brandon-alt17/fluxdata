@@ -2,7 +2,6 @@
   "name": "fluxdata",
   "version": "1.0.0",
   "description": "Este proyecto simula un intermediario tecnológico ante la DIAN para recibir, validar y firmar documentos UBL 2.1.",
-  "main": "index.js",
   "directories": {
     "doc": "docs"
   },
