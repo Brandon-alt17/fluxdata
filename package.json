@@ -6,7 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "dev": "nodemon backend/src/postgresql.js",
+     "dev": "nodemon backend/src/database/postgresql.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
