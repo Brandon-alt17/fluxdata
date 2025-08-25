@@ -1,6 +1,6 @@
-import pg from "pg";
+import { Pool } from "pg";
 
-export const Pool = new pg.Pool({
+export const pool = new Pool({
   host: "localhost",
   port: 5432,
   database: "db_fluxdata",

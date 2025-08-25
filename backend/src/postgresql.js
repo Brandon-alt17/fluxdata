@@ -10,4 +10,3 @@ const getLanguages = async () => {
 };
 
 getLanguages();
-
