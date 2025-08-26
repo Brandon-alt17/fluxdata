@@ -1,13 +1,12 @@
 import { pool } from "./database/conectionPosgreSQL.js";
 
-const getLanguages = async () => {
+const getUsuarios = async () => {
   try {
-    const result = await pool.query("SELECT id, name, developers, enabled FROM languages;");
-    console.log(result); 
+    const result = await pool.query("SELECT * FROM Usuarios;");
+    console.log(result.rows);
   } catch (error) {
     console.error(error);
   }
 };
 
-getLanguages();
-
+getUsuarios();

@@ -6,6 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "start": "node frontend/src/pages/restablecer_contrasena/index.tsx",
     "dev": "nodemon backend/src/postgresql.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
