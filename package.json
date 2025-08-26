@@ -6,6 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "start": "nodemon fronted/src/index.js",
     "dev": "nodemon backend/src/postgresql.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
