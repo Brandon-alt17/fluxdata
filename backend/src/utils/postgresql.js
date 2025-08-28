@@ -1,4 +1,4 @@
-import { pool } from "./database/conectionPosgreSQL.js";
+import { pool } from "../database/conectionPosgreSQL.js";
 
 const getUsuarios = async () => {
   try {
