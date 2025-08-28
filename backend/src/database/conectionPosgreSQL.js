@@ -6,4 +6,4 @@ export const pool = new Pool({
   database: "db_fluxdata",
   user: "postgres",
   password: "Swordtech",
-});
+});   
