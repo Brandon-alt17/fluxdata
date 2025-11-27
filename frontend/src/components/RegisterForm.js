@@ -21,7 +21,7 @@ export default function RegisterForm() {
   const [step, setStep] = useState(1);
   const [codigo, setCodigo] = useState(Array(6).fill(""));
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -79,13 +79,16 @@ export default function RegisterForm() {
       if (!res.ok) {
         setMsgCodigo(data.error || "Código inválido");
         setCodigo(Array(6).fill(""));
-        setTimeout(() => { const firstInput = document.getElementById("codigo-0"); if (firstInput) firstInput.focus(); }, 50);
+        setTimeout(() => {
+          const firstInput = document.getElementById("codigo-0");
+          if (firstInput) firstInput.focus();
+        }, 50);
         return;
       }
       setMsgCodigo("Empresa registrada exitosamente");
       setTimeout(() => {
-        if (location.state?.fromInicio) { navigate("/", { replace: true }); }
-        else { navigate("/login"); }
+        if (location.state?.fromInicio) navigate("/", { replace: true });
+        else navigate("/login");
       }, 2000);
     } catch (error) { setMsgCodigo("Error de conexión con el servidor"); }
   };
@@ -101,25 +104,24 @@ export default function RegisterForm() {
       }}
     >
       <div className="shadow-xl rounded-2xl flex flex-col md:flex-row overflow-hidden w-full max-w-[1050px] h-auto md:h-[650px] bg-white">
-        {/* Contenedor izquierdo */}
+        
+        {/* Izquierda */}
         <div className="w-full md:w-1/2 flex flex-col justify-center px-6 md:px-12 py-6 md:py-8 rounded-t-2xl md:rounded-l-2xl"
              style={{ backgroundColor: "#FFFFFF", clipPath: "polygon(0 0, 92% 0, 100% 100%, 0% 100%)" }}>
           
-          {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <img src={fluxLogo} alt="FluxData" className="h-4 md:h-5" />
             <img src={backArrow} alt="Volver" className="h-6 cursor-pointer" 
-                 onClick={() => {
-                  setMsg(""); setMsgCodigo(""); setCodigo(Array(6).fill(""));
-                  if (step === 1) {
-                    if (location.state?.fromInicio) navigate("/", { replace: true });
-                    else navigate(-1);
-                  } else setStep(1);
-                 }}
+              onClick={() => {
+                setMsg(""); setMsgCodigo(""); setCodigo(Array(6).fill(""));
+                if (step === 1) {
+                  if (location.state?.fromInicio) navigate("/", { replace: true });
+                  else navigate(-1);
+                } else setStep(1);
+              }}
             />
           </div>
 
-          {/* Título */}
           <div className="text-center mb-6">
             {step === 1 ? (
               <>
@@ -130,22 +132,46 @@ export default function RegisterForm() {
               <>
                 <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Verificación de correo</h1>
                 <p className="text-gray-500 text-sm md:text-base">
-                  Escribe el código de Verificación que se envió al Correo Electrónico:
+                  Escribe el código enviado a tu correo:
                 </p>
               </>
             )}
           </div>
 
-          {/* Formulario / Verificación */}
           {step === 1 ? (
             <form onSubmit={handleSubmit} className="w-full max-w-sm mx-auto">
-              <input type="text" name="nombre_empresa" placeholder="Nombre de Empresa" value={form.nombre_empresa} onChange={handleChange} className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <input type="text" name="nit_empresa" placeholder="NIT" value={form.nit_empresa} onChange={(e) => { const value = e.target.value.replace(/\D/g, ""); setForm({ ...form, nit_empresa: value }); }} maxLength="10" className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <input type="email" name="correo_contacto" placeholder="Correo Electrónico" value={form.correo_contacto} onChange={handleChange} className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <input type="password" name="contrasena" placeholder="Contraseña" value={form.contrasena} onChange={handleChange} className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <input type="password" name="confirmar_contrasena" placeholder="Confirmar Contraseña" value={form.confirmar_contrasena} onChange={handleChange} className="w-full p-3 mb-6 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <button type="submit" className="w-full bg-[#2E3A59] text-white py-3 rounded-full font-semibold hover:bg-[#1f2a40] transition mb-4">Registrarse</button>
+              <input type="text" name="nombre_empresa" placeholder="Nombre de Empresa"
+                value={form.nombre_empresa} onChange={handleChange}
+                className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-400" />
+
+              <input type="text" name="nit_empresa" placeholder="NIT"
+                value={form.nit_empresa}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "");
+                  setForm({ ...form, nit_empresa: value });
+                }}
+                maxLength="10"
+                className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-400" />
+
+              <input type="email" name="correo_contacto" placeholder="Correo Electrónico"
+                value={form.correo_contacto} onChange={handleChange}
+                className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-400" />
+
+              <input type="password" name="contrasena" placeholder="Contraseña"
+                value={form.contrasena} onChange={handleChange}
+                className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-400" />
+
+              <input type="password" name="confirmar_contrasena" placeholder="Confirmar Contraseña"
+                value={form.confirmar_contrasena} onChange={handleChange}
+                className="w-full p-3 mb-6 border rounded-lg focus:ring-2 focus:ring-blue-400" />
+
+              <button type="submit"
+                className="w-full bg-[#2E3A59] text-white py-3 rounded-full font-semibold hover:bg-[#1f2a40] transition mb-4">
+                Registrarse
+              </button>
+
               {msg && <p className="text-red-500 text-xs text-center mb-4">{msg}</p>}
+
               <p className="text-center text-sm text-gray-600 mt-0">
                 ¿Ya tienes cuenta? <Link to="/login" className="text-blue-600 hover:underline">Inicia Sesión</Link>
               </p>
@@ -154,12 +180,16 @@ export default function RegisterForm() {
             <div className="w-full max-w-sm mx-auto text-center">
               <div className="flex justify-between mb-6">
                 {codigo.map((val, i) => (
-                  <input key={i} id={`codigo-${i}`} type="text" value={val} maxLength="1" onChange={(e) => handleCodigoChange(e, i)} className="w-12 h-12 text-center text-lg border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  <input key={i} id={`codigo-${i}`} type="text" value={val} maxLength="1"
+                    onChange={(e) => handleCodigoChange(e, i)}
+                    className="w-12 h-12 text-center text-lg border rounded-lg focus:ring-2 focus:ring-blue-400" />
                 ))}
               </div>
+
               {msgCodigo && <p className="text-red-500 text-center mb-4">{msgCodigo}</p>}
-              <div className="flex justify-center">
-                <button type="button" onClick={async () => {
+
+              <button type="button"
+                onClick={async () => {
                   try {
                     const res = await fetch("http://localhost:3000/api/empresas/resend-code", {
                       method: "POST",
@@ -168,20 +198,36 @@ export default function RegisterForm() {
                     });
                     const data = await res.json();
                     if (!res.ok) setMsgCodigo(data.error || "Error reenviando código");
-                    else { setMsgCodigo("Se ha enviado un nuevo código a tu correo"); setCodigo(Array(6).fill("")); }
-                  } catch (error) { setMsg("Error de conexión con el servidor"); }
-                }} className="bg-[#2E3A59] text-white px-6 py-2 rounded-full font-semibold hover:bg-[#1f2a40] transition">
-                  Reenviar código
-                </button>
-              </div>
+                    else {
+                      setMsgCodigo("Nuevo código enviado");
+                      setCodigo(Array(6).fill(""));
+                    }
+                  } catch (error) {
+                    setMsg("Error de conexión con el servidor");
+                  }
+                }}
+                className="bg-[#2E3A59] text-white px-6 py-2 rounded-full font-semibold hover:bg-[#1f2a40] transition">
+                Reenviar código
+              </button>
             </div>
           )}
         </div>
 
-        {/* Contenedor derecho imagen */}
-        <div className="w-full md:w-1/2 p-4 md:p-0 flex">
-          <img src={step === 1 ? registerImage : verifyImage} alt="Panel derecho" className="object-contain w-full h-full rounded-b-2xl md:rounded-r-2xl" />
+        {/* DERECHA — OCULTO EN CEL VERTICAL */}
+        <div className="
+          hidden
+          md:flex
+          [@media(orientation:landscape)]:flex
+          w-full md:w-1/2
+          p-4 md:p-0
+        ">
+          <img
+            src={step === 1 ? registerImage : verifyImage}
+            alt="Panel derecho"
+            className="object-contain w-full h-full rounded-b-2xl md:rounded-r-2xl"
+          />
         </div>
+
       </div>
     </div>
   );
