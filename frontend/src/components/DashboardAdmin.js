@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip,Cell, CartesianGrid, ResponsiveContainer, LabelList } from "recharts";
-import { BASE_API_URL } from "../config/api";
+import { API_URL } from "../config.js";
 
 export default function DashboardGlobal() {
   const [resumen, setResumen] = useState({
@@ -14,11 +14,11 @@ export default function DashboardGlobal() {
   const [validacionesSemana, setValidacionesSemana] = useState([]);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await fetch(`${BASE_API_URL}//api/admin/dashboard`, {
+        const res = await fetch(`${API_URL}/api/admin/dashboard`, {
+
           credentials: "include"
         });
         const data = await res.json();
@@ -116,7 +116,7 @@ export default function DashboardGlobal() {
             <tr key={i} className="hover:bg-gray-50">
               <td className="px-4 py-2 border border-gray-300 text-black">{doc.empresa}</td>
               <td className="px-4 py-2 border border-gray-300 text-black">{doc.tipo}</td>
-              <td className="px-4 py-2 border border-gray-300 text-black">{doc.numero_serie}</td>
+              <td className="px-4 py-2 border border-gray-300 text-black">{doc.numero_documento}</td>
               <td className="px-4 py-2 border border-gray-300 text-black">{doc.fecha}</td>
               <td className="px-4 py-2 border border-gray-300 font-semibold text-black">{doc.estado}</td>
               <td className="px-4 py-2 border border-gray-300 font-semibold text-black">
@@ -143,3 +143,4 @@ export default function DashboardGlobal() {
 </div>
 );
 }
+

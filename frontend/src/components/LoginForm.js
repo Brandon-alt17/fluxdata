@@ -1,28 +1,27 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
-import fluxLogo from "../assets/fluxdata.png";
-import backArrow from "../assets/back-arrow.png";
+import fluxLogo from "../assets/fluxdata.svg";
+import backArrow from "../assets/back-arrow.svg";
 import laptopImage from "../assets/laptop.jpg";
 import laptop from "../assets/im.png";
+import { API_URL } from "../config.js";
 
 export default function LoginForm() {
   const [emailOrName, setEmailOrName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
-
+  const navigate = useNavigate(); 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    try {
-      const res = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emailOrName, password }),
-        credentials: "include",
-      });
+  try {
+    const res = await fetch(`${API_URL}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ emailOrName, password }),
+      credentials: "include",
+    });
 
       const data = await res.json();
       if (!res.ok) {
@@ -32,12 +31,10 @@ export default function LoginForm() {
       if (data.user.role === "admin") {
         navigate("/admin/dashboard");
       } else {
-        const usuarioId = data.user.id;
-        localStorage.setItem("usuarioId", usuarioId);
-        const estadoRes = await fetch(
-          `http://localhost:3000/api/configuracion/estado/${usuarioId}`
-        );
-        const estadoData = await estadoRes.json();
+    const usuarioId = data.user.id;
+    localStorage.setItem("usuarioId", usuarioId);
+    const estadoRes = await fetch(`${API_URL}/api/configuracion/estado/${usuarioId}`);
+    const estadoData = await estadoRes.json();
 
         if (estadoData.completado) {
           navigate("/dashboard");

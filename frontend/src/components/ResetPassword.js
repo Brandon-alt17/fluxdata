@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import fluxLogo from "../assets/fluxdata.png";
-import backArrow from "../assets/back-arrow.png";
+import fluxLogo from "../assets/fluxdata.svg";
+import backArrow from "../assets/back-arrow.svg";
 import laptopImage from "../assets/laptop2.jpg";
 import laptop1 from "../assets/im1.png";
-import { BASE_API_URL } from "../config/api";
+import { API_URL } from "../config.js";
 
 export default function ResetPassword() {
   const { token } = useParams();
@@ -27,7 +27,7 @@ export default function ResetPassword() {
       return;
     }
     try {
-      const res = await fetch(`${BASE_API_URL}/api/reset-password`, {
+      const res = await fetch(`${API_URL}/api/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, password, confirmPassword }),

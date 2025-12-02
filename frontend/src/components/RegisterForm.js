@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import fluxLogo from "../assets/fluxdata.png";
-import backArrow from "../assets/back-arrow.png";
+import fluxLogo from "../assets/fluxdata.svg";
+import backArrow from "../assets/back-arrow.svg";
 import registerImage from "../assets/register.jpg"; 
-import verifyImage from "../assets/Imagenes (7).jpg";
+import verifyImage from "../assets/im4.jpg";
 import im3 from "../assets/im3.png";
 import im2 from "../assets/im2.png";
 
@@ -56,7 +56,8 @@ export default function RegisterForm() {
     if (contrasena !== confirmar_contrasena) { setMsg("Las contraseñas no coinciden"); return; }
 
     try {
-      const res = await fetch("http://localhost:3000/api/empresas/pre-register", {
+
+      const res = await fetch(`${API_URL}/api/empresas/pre-register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -70,7 +71,7 @@ export default function RegisterForm() {
   const handleVerify = async (codigoCompleto) => {
     setMsgCodigo("");
     try {
-      const res = await fetch("http://localhost:3000/api/empresas/verify-code", {
+      const res = await fetch(`${API_URL}/api/empresas/verify-code`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo_contacto: form.correo_contacto, codigo: codigoCompleto }),
@@ -191,7 +192,7 @@ export default function RegisterForm() {
               <button type="button"
                 onClick={async () => {
                   try {
-                    const res = await fetch("http://localhost:3000/api/empresas/resend-code", {
+                    const res = await fetch(`${API_URL}//api/empresas/resend-code`, {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({ correo_contacto: form.correo_contacto }),

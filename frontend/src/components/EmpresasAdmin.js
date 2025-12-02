@@ -1,35 +1,34 @@
 import { useEffect, useState } from "react";
-import lup from "../assets/lup.png";
-import ps from "../assets/ps.png";
-import psr from "../assets/psr.png";
-import FL from "../assets/FL.png";
-import backArrow from "../assets/back-arrow.png";
-import fluxLogo from "../assets/Logo2.png";
-import { BASE_API_URL } from "../config/api";
+import lup from "../assets/lup.svg";
+import ps from "../assets/ps.svg";
+import psr from "../assets/psr.svg";
+import FL from "../assets/FL.svg";
+import backArrow from "../assets/back-arrow.svg";
+import fluxLogo from "../assets/Logo2.svg";
+import { API_URL } from "../config";
 
 export default function EmpresasAdmin() {
   const [empresas, setEmpresas] = useState([]);
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
   const [filtros, setFiltros] = useState({ nombre: "", nit: "", estado: "" });
   const [empresaSeleccionada, setEmpresaSeleccionada] = useState(null);
-
   // Obtener todas las empresas
   const obtenerEmpresas = async () => {
     try {
-      const res = await fetch(`${BASE_API_URL}//api/empresas`);
+      const res = await fetch(`${API_URL}/api/empresas`);
+
       const data = await res.json();
       setEmpresas(data);
     } catch (error) {
       console.log("Error obteniendo empresas", error);
     }
   };
-  
 
   // Cambiar estado de empresa
   const cambiarEstado = async (id, estadoActual) => {
     const nuevoEstado = estadoActual === "activo" ? "inactivo" : "activo";
     try {
-      await fetch(`${BASE_API_URL}/api/empresas/${id}/estado`, {
+      await fetch(`${API_URL}/api/empresas/${id}/estado`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ estado: nuevoEstado }),
@@ -45,7 +44,7 @@ export default function EmpresasAdmin() {
   // Ver detalle de empresa
   const verDetalle = async (id) => {
     try {
-      const res = await fetch(`${BASE_API_URL}/api/empresas/${id}`);
+      const res = await fetch(`${API_URL}/api/empresas/${id}`);
       const data = await res.json();
       setEmpresaSeleccionada(data.usuario); // abrir modal
     } catch (error) {
@@ -74,7 +73,6 @@ export default function EmpresasAdmin() {
 
   return (
     <div className="p-6 w-full flex flex-col items-center font-work-sans">
-      {/* BOTÓN FILTRAR */}
       <div className="mb-4 w-[95%] flex justify-end">
         <button
           onClick={() => setMostrarFiltros(!mostrarFiltros)}
@@ -103,8 +101,7 @@ export default function EmpresasAdmin() {
           <select
             className="border px-3 py-2 rounded-lg flex-1 min-w-[150px] appearance-none"
             value={filtros.estado}
-            onChange={(e) => setFiltros({ ...filtros, estado: e.target.value })}
-          >
+            onChange={(e) => setFiltros({ ...filtros, estado: e.target.value })}>
             <option value="">Todos</option>
             <option value="activo">Activo</option>
             <option value="inactivo">Inactivo</option>
@@ -112,8 +109,7 @@ export default function EmpresasAdmin() {
           <div className="flex gap-2 ml-auto">
             <button
               onClick={limpiarFiltro}
-              className="px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-200"
-            >
+              className="px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-200">
               Limpiar
             </button>
           </div>
@@ -154,8 +150,7 @@ export default function EmpresasAdmin() {
                     <img
                       src={lup}
                       className="h-6 cursor-pointer"
-                      onClick={() => verDetalle(e.id_usuario)}
-                    />
+                      onClick={() => verDetalle(e.id_usuario)}/>
                     <img
                       src={e.estado === "activo" ? ps : psr}
                       className="h-6 cursor-pointer"

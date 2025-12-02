@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import FL from "../assets/FL.png";
-import EX from "../assets/EX.png";
-import V1 from "../assets/V1.png";
-import V3 from "../assets/V3.png";
-import { BASE_API_URL } from "../config/api";
+import FL from "../assets/FL.svg";
+import EX from "../assets/EX.svg";
+import V1 from "../assets/V1.svg";
+import V3 from "../assets/V3.svg";
+import { API_URL } from "../config";
 
 export default function RegistrosAdmin() {
   const [animando, setAnimando] = useState(false);
@@ -28,7 +28,7 @@ export default function RegistrosAdmin() {
     if (filtros.resultado.trim() !== "") {
       params.append("resultado", filtros.resultado);
     }
-      const res = await fetch(`${BASE_API_URL}api/registros?${params}`);
+      const res = await fetch(`${API_URL}/api/registros?${params}`);
       const data = await res.json();
       setRegistros(data.registros || []);
       setPagina(data.pagina_actual || 1);
