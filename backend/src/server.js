@@ -19,7 +19,7 @@ import tokenRoutes from "./routes/token.js"
 import registrosRouter from "./routes/registros.js"
 import dashboardAdmin from "./routes/dashboardAdmin.js"
 import xmlDashboardRouter from "./routes/xmldashboard.js"
-
+import logoutRouter from "./routes/logout.js"
 
 dotenv.config()
 
@@ -65,7 +65,7 @@ app.use("/api/token", tokenRoutes)
 app.use("/api/registros", registrosRouter)
 app.use("/api/admin/dashboard", dashboardAdmin)
 app.use("/api/dashboard-xml", xmlDashboardRouter);
-
+app.use("/api/logout", logoutRouter);
 
 
 // Puerto
