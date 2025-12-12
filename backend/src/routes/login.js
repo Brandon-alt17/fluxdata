@@ -7,15 +7,22 @@ import { prisma } from "../lib/prisma.js";
 const router = Router();
 
 router.post("/", async (req, res) => {
+  console.log("[LOGIN] received body:", req.body);
   try {
-    const { emailOrName, password } = req.body;
+    const { emailOrName, password } = req.body || {};
 
     if (!emailOrName || !password) {
+      console.warn("[LOGIN] missing credentials:", { emailOrNameProvided: !!emailOrName, passwordProvided: !!password });
       return res.status(400).json({ error: "Usuario/email y password son requeridos" });
     }
 
-    // Login admin
+    // Admin login (mantengo tu lógica)
     if (emailOrName === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
+      const secret = process.env.JWT_SECRET;
+      if (!secret) {
+        console.warn("[LOGIN][ADMIN] WARNING: JWT_SECRET not defined, using fallback (dev only)");
+      }
+
       const token = jwt.sign(
         {
           sub: "admin",
@@ -23,14 +30,14 @@ router.post("/", async (req, res) => {
           name: process.env.ADMIN_NAME,
           email: process.env.ADMIN_USER,
         },
-        process.env.JWT_SECRET,
+        secret || "dev-secret",
         { expiresIn: process.env.JWT_EXPIRES_IN || "1d" }
       );
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "None",
+        secure: process.env.NODE_ENV === "production", // secure only in prod
+        sameSite: "none",
         maxAge: 24 * 60 * 60 * 1000,
       });
 
@@ -45,7 +52,7 @@ router.post("/", async (req, res) => {
       });
     }
 
-    // Login usuario/empresa
+    // Buscar usuario/empresa
     const user = await prisma.usuarios.findFirst({
       where: {
         OR: [
@@ -63,32 +70,44 @@ router.post("/", async (req, res) => {
       },
     });
 
+    console.log("[LOGIN] user found:", !!user, user ? { id: user.id_usuario, estado: user.estado } : null);
 
-    if (!user) return res.status(401).json({ error: "Credenciales inválidas" });
+    if (!user) {
+      return res.status(401).json({ error: "Credenciales inválidas" });
+    }
 
-    // VALIDAR ESTADO
-    if (user.estado !== "activo") {
+    // Validar estado solo si existe el campo (evita comparaciones con undefined)
+    if (typeof user.estado !== "undefined" && user.estado !== "activo") {
       return res.status(403).json({ error: "Cuenta inactiva, contacte al administrador" });
     }
 
-    const validPassword = await bcrypt.compare(password, user.contrasena_usuario);
-    if (!validPassword) return res.status(401).json({ error: "Credenciales inválidas" });
+    if (!user.contrasena_usuario) {
+      // Esto indica un problema en la DB (usuario sin hash)
+      console.error("[LOGIN] user has no password hash:", user);
+      return res.status(500).json({ error: "Error interno en login", details: "Usuario sin contraseña almacenada" });
+    }
 
+    const validPassword = await bcrypt.compare(password, user.contrasena_usuario);
+    if (!validPassword) {
+      return res.status(401).json({ error: "Credenciales inválidas" });
+    }
+
+    const secret = process.env.JWT_SECRET || "dev-secret";
     const token = jwt.sign(
       {
         sub: user.id_usuario,
         email: user.correo_contacto,
         name: user.nombre_usuario,
-        role: "user",
+        role: user.rol_usuario || "user",
       },
-      process.env.JWT_SECRET,
+      secret,
       { expiresIn: process.env.JWT_EXPIRES_IN || "1d" }
     );
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -98,15 +117,16 @@ router.post("/", async (req, res) => {
         id: user.id_usuario,
         name: user.nombre_usuario,
         email: user.correo_contacto,
-        role: "user",
+        role: user.rol_usuario || "user",
       },
     });
-
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Error interno en login" });
+    // Log completo con stack para depuración
+    console.error("[LOGIN] Error interno:", err && err.stack ? err.stack : err);
+    const payload = { error: "Error interno en login" };
+    if (process.env.NODE_ENV !== "production") payload.details = err?.message || String(err);
+    return res.status(500).json(payload);
   }
 });
 
 export default router;
-
